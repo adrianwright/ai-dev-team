@@ -143,7 +143,7 @@ Before implementing any screen, read these sources:
 - `src/web/src/` — Read existing components before creating new ones to maintain consistency in patterns, naming, and file structure. **Especially read `CaseDetailPage.jsx` for the correct design system import + fallback pattern.**
 
 ### 4. Frontend Code Style Reference
-- `src-reference/web/` — Review these files to understand the **types** of files the project produces (component structure, hook patterns, service modules, routing, build config, etc.) and follow the same structural conventions. **However, do NOT copy or reuse the actual content of these files** — they contain implementation from a previous customer engagement and are not applicable to this project. Build all components fresh based on the current mockups and design system. **Do NOT write to the `src-reference/` directory.**
+- `src-reference/web/` — Review these files to understand the **types** of files the project produces (component structure, hook patterns, service modules, routing, build config, etc.) and follow the same structural conventions. **However, do NOT copy or reuse the actual content of these files** — use them only as structural examples, then build all components fresh based on the current mockups and design system. **Do NOT write to the `src-reference/` directory.**
 
 ### 5. API Endpoints
 - `src/api/` — Check available API endpoints to know what data is available and how to call it. Wire up real API calls, not hardcoded data.

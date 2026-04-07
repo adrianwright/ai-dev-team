@@ -23,7 +23,7 @@ Before implementing any endpoint, read these sources:
 - `src/api/` — Read existing controllers, services, entities, and the DbContext before adding new code. Match existing patterns.
 
 ### 4. API Code Style Reference
-- `src-reference/api/` — Review these files to understand the **types** of files the project produces (controllers, services, entities, DTOs, Program.cs structure, etc.) and follow the same structural and naming conventions. **However, do NOT copy or reuse the actual content of these files** — they contain implementation from a previous customer engagement and are not applicable to this project. Design all endpoints, services, and DTOs fresh based on the current domain and UX requirements. **Do NOT write to the `src-reference/` directory.**
+- `src-reference/api/` — Review these files to understand the **types** of files the project produces (controllers, services, entities, DTOs, Program.cs structure, etc.) and follow the same structural and naming conventions. **However, do NOT copy or reuse the actual content of these files** — use them only as structural examples, then design all endpoints, services, and DTOs fresh based on the current domain and UX requirements. **Do NOT write to the `src-reference/` directory.**
 
 ### 5. Project Instructions
 - `.github/copilot-instructions.md` — Backend coding standards, Cosmos DB guidance, and API conventions.

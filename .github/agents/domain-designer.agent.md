@@ -36,7 +36,7 @@ Before creating any design document, read and cross-reference these sources:
 - `docs/design/*.md` — Any previously created design docs. Read these first to avoid duplication and ensure consistency.
 
 ### 6. Design Document Style Reference
-- `docs/design-reference/` — Review these files to understand the **types** of design documents the project produces (entity specs, implementation plans, domain overviews, field tables, relationship diagrams, etc.) and follow the same structural and formatting conventions. **However, do NOT copy or reuse the actual content of these files** — they contain domain designs from a previous customer engagement and are not applicable to this project. Produce all new design documents fresh based on the current mockups and domain requirements. **Do NOT write to the `docs/design-reference/` directory.**
+- `docs/design-reference/` — Review these files to understand the **types** of design documents the project produces (entity specs, implementation plans, domain overviews, field tables, relationship diagrams, etc.) and follow the same structural and formatting conventions. **However, do NOT copy or reuse the actual content of these files** — use them only as structural examples, then produce all new design documents fresh based on the current mockups and domain requirements. **Do NOT write to the `docs/design-reference/` directory.**
 
 ## Output Format
 

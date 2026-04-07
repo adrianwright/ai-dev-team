@@ -158,7 +158,7 @@ Report findings as: **Pass**, **Fail**, or **Not Yet Implemented**, with actiona
 ## Reference Material
 
 ### Code Style Reference
-- `src-reference/api/` — Review these files to understand the **types** of backend files the project produces (Program.cs structure, middleware patterns, configuration layout, etc.) and follow the same structural conventions. **However, do NOT copy or reuse the actual content of these files** — they contain implementation from a previous customer engagement and are not applicable to this project. Implement all security configuration fresh based on the current architecture. **Do NOT write to the `src-reference/` directory.**
+- `src-reference/api/` — Review these files to understand the **types** of backend files the project produces (Program.cs structure, middleware patterns, configuration layout, etc.) and follow the same structural conventions. **However, do NOT copy or reuse the actual content of these files** — use them only as structural examples, then implement all security configuration fresh based on the current architecture. **Do NOT write to the `src-reference/` directory.**
 
 ## Output
 

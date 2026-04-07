@@ -35,7 +35,7 @@ Before building any plan, read these:
 - `.github/instructions/instructions.instructions.md` — Use case list and domain context.
 
 ### 5. Reference Directories (Style Guide Only)
-The following `-reference` directories contain artifacts from a previous customer engagement. Use them to understand the **types and structure** of files each agent should produce, but **do NOT copy or reuse actual content** from them and **do NOT write to them**:
+The following `-reference` directories provide structural examples for the **types and structure** of files each agent should produce, but **do NOT copy or reuse actual content** from them and **do NOT write to them**:
 - `docs/reqs-reference/` — Mockup HTML file conventions (for ux-designer)
 - `docs/design-reference/` — Design document conventions (for domain-designer)
 - `src-reference/api/` — API code conventions (for api-development, security-development)
