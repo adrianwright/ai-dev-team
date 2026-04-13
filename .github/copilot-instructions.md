@@ -1,9 +1,9 @@
-# GitHub Copilot Instructions - AI Dev Team
+# GitHub Copilot Instructions - AI Dev Team Demo
 
 ## Purpose
 These instructions define how Copilot should generate and modify code in this repository.
 
-The solution is a full-stack application with:
+The solution is an Interplanetary Study Abroad Portal proof of concept ("AstraTerra") with:
 - React frontend.
 - .NET 10 backend services using microservice API best practices.
 - Azure Cosmos DB for NoSQL as the operational data store.
@@ -34,9 +34,18 @@ The solution is a full-stack application with:
   - distributed tracing (OpenTelemetry-ready),
   - correlation IDs.
 - Validate requests at API boundaries and fail fast on invalid inputs.
+- **EF Core LINQ translation rule**: Never use record/class constructors inside `.Select()` after `.GroupBy()`. EF Core cannot translate these. Always project to anonymous types first, call `ToListAsync()`, then map to DTOs/records client-side.
 - Keep business rules in domain/service layers, not endpoint glue code.
 - Keep containerized runtime and configuration twelve-factor friendly.
 - Protect secrets via configuration providers (never hard-code secrets).
+
+## Container Runtime Rules
+
+- The app runs on **Azure Container Apps** with port **8080** as the standard container port.
+- When setting `ASPNETCORE_URLS` or configuring Kestrel, always use port `8080` to match the infrastructure.
+- Health probes (liveness and readiness) target `/health` on port `8080`. Never change the app port without also updating `infra/terraform/main.tf` (target_port, probe ports).
+- The Dockerfile should `EXPOSE 8080` and the app must bind to `0.0.0.0:8080` (not localhost).
+- If a port mismatch exists between app config and infra, the container will fail health probes and restart indefinitely.
 
 ## Azure Cosmos DB Guidance (Microsoft Best Practices)
 

@@ -1,0 +1,14 @@
+name: astraterra-isa
+metadata:
+  template: astraterra-isa
+infra:
+  provider: terraform
+  path: infra/terraform
+services:
+  backend:
+    project: ./src/api/AstraTerra.Api
+    host: containerapp
+    image: astraterra-isa/backend
+    docker:
+      path: ./Dockerfile
+      context: ../../../

@@ -1,0 +1,478 @@
+<!-- Multi-Agent Development Workflow -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Agent Development Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Open Sans", sans-serif;
+    background: #f3f0fa;
+    color: #1e1e1e;
+    padding: 40px 24px 80px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #3d2e7c;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #737373;
+    margin-bottom: 48px;
+  }
+
+  /* ── layout ── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── source material block ── */
+  .source-block {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .source {
+    background: #fff;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    padding: 14px 20px;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .source .icon { font-size: 22px; margin-bottom: 4px; }
+  .source .label { font-size: 13px; font-weight: 600; color: #404040; }
+
+  /* ── connector arrows ── */
+  .arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    color: #3d2e7c;
+  }
+  .arrow .line {
+    width: 3px;
+    height: 32px;
+    background: #3d2e7c;
+  }
+  .arrow .head {
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #3d2e7c;
+  }
+  .arrow .label-text {
+    font-size: 11px;
+    color: #737373;
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ── agent cards ── */
+  .agent-card {
+    width: 100%;
+    max-width: 680px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(61,46,124,.12);
+    overflow: hidden;
+    position: relative;
+  }
+  .agent-card .accent {
+    height: 5px;
+    width: 100%;
+  }
+  .agent-card .body {
+    padding: 24px 28px 20px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .agent-card .badge {
+    flex-shrink: 0;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .agent-card .info { flex: 1; }
+  .agent-card .name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .agent-card .role {
+    font-size: 13px;
+    color: #737373;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .io-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .io-tag {
+    font-size: 11px;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .io-tag.reads  { background: #eff6ff; color: #1b6cb0; }
+  .io-tag.creates { background: #ecfdf5; color: #1b7d46; }
+
+  /* ── step number ── */
+  .step-num {
+    position: absolute;
+    top: 16px; right: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: #3d2e7c;
+    border-radius: 20px;
+    padding: 2px 12px;
+  }
+
+  /* ── colors per agent ── */
+  .ux     .accent, .ux     .badge { background: #e07c24; }
+  .domain .accent, .domain .badge { background: #3d2e7c; }
+  .orch   .accent, .orch   .badge { background: #059669; }
+  .db     .accent, .db     .badge { background: #1b6cb0; }
+  .api    .accent, .api    .badge { background: #0e7490; }
+  .ui     .accent, .ui     .badge { background: #7c3aed; }
+  .sec    .accent, .sec    .badge { background: #b91c1c; }
+
+  .ux     .name { color: #e07c24; }
+  .domain .name { color: #3d2e7c; }
+  .orch   .name { color: #059669; }
+  .db     .name { color: #1b6cb0; }
+  .api    .name { color: #0e7490; }
+  .ui     .name { color: #7c3aed; }
+  .sec    .name { color: #b91c1c; }
+
+  /* ── parallel row ── */
+  .parallel-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 680px;
+  }
+  .parallel-row .agent-card {
+    flex: 1;
+    max-width: none;
+  }
+  .parallel-label {
+    font-size: 11px;
+    color: #737373;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* ── orchestrator wrapper ── */
+  .orch-wrapper {
+    width: 100%;
+    max-width: 720px;
+    border: 2px solid #059669;
+    border-radius: 16px;
+    padding: 20px 16px 16px;
+    position: relative;
+    background: #f0fdf9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .orch-wrapper .orch-header {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #059669;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 18px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .orch-wrapper .orch-note {
+    font-size: 11px;
+    color: #737373;
+    text-align: center;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* ── shared rules overlay ── */
+  .shared-rules {
+    max-width: 680px;
+    width: 100%;
+    margin-top: 40px;
+    background: #fff;
+    border: 2px dashed #d4d4d4;
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+  .shared-rules h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #3d2e7c;
+    margin-bottom: 8px;
+  }
+  .shared-rules p {
+    font-size: 12px;
+    color: #737373;
+    line-height: 1.6;
+  }
+  .shared-rules .files {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .shared-rules .file-tag {
+    font-size: 11px;
+    font-family: monospace;
+    background: #ece8f6;
+    color: #3d2e7c;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* ── side annotation ── */
+  .annotation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+  }
+  .annotation .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .annotation .text {
+    font-size: 11px;
+    color: #737373;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<h1>Multi-Agent Development Workflow</h1>
+<p class="subtitle">How seven specialized AI coding agents chain together to build a full-stack application from requirements to production</p>
+
+<div class="pipeline">
+
+  <!-- ════ SOURCE MATERIAL ════ -->
+  <div class="source-block">
+    <div class="source">
+      <div class="icon">📸</div>
+      <div class="label">Legacy Screenshots</div>
+    </div>
+    <div class="source">
+      <div class="icon">📊</div>
+      <div class="label">Existing Data Model</div>
+    </div>
+    <div class="source">
+      <div class="icon">📋</div>
+      <div class="label">Use Cases</div>
+    </div>
+    <div class="source">
+      <div class="icon">📐</div>
+      <div class="label">Project Instructions</div>
+    </div>
+  </div>
+
+  <!-- arrow -->
+  <div class="arrow">
+    <div class="line"></div>
+    <div class="head"></div>
+    <div class="label-text">feeds into</div>
+  </div>
+
+  <!-- ════ STEP 1 — UX DESIGNER ════ -->
+  <div class="agent-card ux">
+    <div class="accent"></div>
+    <span class="step-num">Step 1</span>
+    <div class="body">
+      <div class="badge">UX</div>
+      <div class="info">
+        <div class="name">UX Designer</div>
+        <div class="role">Produces static HTML/CSS mockups that stakeholders can review in a browser. Uses design system tokens to create page-level prototypes with realistic placeholder data.</div>
+        <div class="io-tags">
+          <span class="io-tag reads">Reads: legacy UI, use cases</span>
+          <span class="io-tag creates">Creates: HTML mockups</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- arrow -->
+  <div class="arrow">
+    <div class="line"></div>
+    <div class="head"></div>
+    <div class="label-text">mockups define fields &amp; workflows</div>
+  </div>
+
+  <!-- ════ STEP 2 — DOMAIN DESIGNER ════ -->
+  <div class="agent-card domain">
+    <div class="accent"></div>
+    <span class="step-num">Step 2</span>
+    <div class="body">
+      <div class="badge">DD</div>
+      <div class="info">
+        <div class="name">Domain Designer</div>
+        <div class="role">Analyzes mockups and existing data to produce the single source of truth — structured specs with entity fields, relationships, access patterns, status workflows, and business rules. No code, only design documents.</div>
+        <div class="io-tags">
+          <span class="io-tag reads">Reads: mockups, existing data model</span>
+          <span class="io-tag creates">Creates: domain design specs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- arrow -->
+  <div class="arrow">
+    <div class="line"></div>
+    <div class="head"></div>
+    <div class="label-text">design docs define entities &amp; access patterns</div>
+  </div>
+
+  <!-- ════ ORCHESTRATOR wraps Steps 3–5 ════ -->
+  <div class="orch-wrapper">
+    <div class="orch-header">🎯 Dev Orchestrator — plans &amp; sequences the work</div>
+
+    <!-- ════ PHASE 1 — DATABASE DEV ════ -->
+    <div class="agent-card db">
+      <div class="accent"></div>
+      <span class="step-num">Phase 1</span>
+      <div class="body">
+        <div class="badge">DB</div>
+        <div class="info">
+          <div class="name">Database Developer</div>
+          <div class="role">Translates domain specs into data infrastructure. Selects appropriate data stores per entity, generates schema definitions, entity models, migrations, and seed data consistent with the mockup placeholders.</div>
+          <div class="io-tags">
+            <span class="io-tag reads">Reads: design specs, mockups</span>
+            <span class="io-tag creates">Creates: entities, migrations, seed data</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- arrow -->
+    <div class="arrow">
+      <div class="line"></div>
+      <div class="head"></div>
+      <div class="label-text">entities &amp; mockups feed implementation</div>
+    </div>
+
+    <!-- ════ PHASE 2 — API DEV ════ -->
+    <div class="agent-card api">
+      <div class="accent"></div>
+      <span class="step-num">Phase 2</span>
+      <div class="body">
+        <div class="badge">API</div>
+        <div class="info">
+          <div class="name">API Developer</div>
+          <div class="role">Implements REST endpoints, service layers, and data access. Reads mockups for what the UI needs, design docs for business rules, and wires up the data access layer to the chosen data stores.</div>
+          <div class="io-tags">
+            <span class="io-tag reads">Reads: mockups, design specs, entities</span>
+            <span class="io-tag creates">Creates: controllers, services, DTOs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- arrow -->
+    <div class="arrow">
+      <div class="line"></div>
+      <div class="head"></div>
+      <div class="label-text">endpoints ready for frontend</div>
+    </div>
+
+    <!-- ════ PHASE 3 — UI DEV ════ -->
+    <div class="agent-card ui">
+      <div class="accent"></div>
+      <span class="step-num">Phase 3</span>
+      <div class="body">
+        <div class="badge">UI</div>
+        <div class="info">
+          <div class="name">UI Developer</div>
+          <div class="role">Turns HTML mockups into production frontend components using design system tokens. Wires components to real API endpoints with loading, error, and empty states.</div>
+          <div class="io-tags">
+            <span class="io-tag reads">Reads: mockups, API endpoints</span>
+            <span class="io-tag creates">Creates: frontend components, hooks</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="orch-note">Orchestrator reads mockups, checks existing code, builds the plan, then delegates to each agent in sequence</div>
+  </div><!-- end orch-wrapper -->
+
+  <!-- arrow -->
+  <div class="arrow">
+    <div class="line"></div>
+    <div class="head"></div>
+    <div class="label-text">reviews &amp; hardens the full stack</div>
+  </div>
+
+  <!-- ════ STEP 5 — SECURITY DEV ════ -->
+  <div class="agent-card sec">
+    <div class="accent"></div>
+    <span class="step-num">Step 5</span>
+    <div class="body">
+      <div class="badge">🔒</div>
+      <div class="info">
+        <div class="name">Security Developer</div>
+        <div class="role">Configures authentication, security headers, secrets management, and network restrictions. Reviews the entire stack for vulnerabilities and scans uncommitted files for sensitive data before push.</div>
+        <div class="io-tags">
+          <span class="io-tag reads">Reads: API code, infra config, uncommitted files</span>
+          <span class="io-tag creates">Creates: auth config, security hardening, pre-commit reviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ SHARED RULES ════ -->
+  <div class="shared-rules">
+    <h3>Shared Configuration — All Agents</h3>
+    <p>Every agent follows global standards for platform decisions, coding patterns, and design system compliance.</p>
+    <div class="files">
+      <span class="file-tag">Coding Standards</span>
+      <span class="file-tag">Domain Context</span>
+      <span class="file-tag">Design System</span>
+      <span class="file-tag">Platform Rules</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

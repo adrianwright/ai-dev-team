@@ -1,0 +1,16 @@
+.git
+.github
+.squad
+.copilot
+.azure
+.vscode
+node_modules
+**/node_modules
+**/bin
+**/obj
+**/dist
+docs
+infra
+*.md
+*.sln
+azure.yaml

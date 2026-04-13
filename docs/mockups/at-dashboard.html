@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ASTRATERRA — Interplanetary Study Abroad Portal Dashboard</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: "Source Sans Pro", Arial, sans-serif; font-size: 13px; background: #e8e8e8; color: #333; margin: 0; }
+
+  /* ── Top banner ── */
+  .top-banner { background: #1A237E; color: #fff; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+  .top-banner .brand { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; letter-spacing: .5px; }
+  .top-banner .brand .icon { font-size: 20px; }
+  .top-banner .user-info { font-size: 12px; opacity: .85; }
+
+  /* ── Mini toolbar ── */
+  .toolbar { background: #f0f0f0; border-bottom: 1px solid #ccc; padding: 4px 16px; display: flex; gap: 6px; align-items: center; }
+  .toolbar button { background: #ddd; border: 1px solid #bbb; font-size: 11px; padding: 2px 10px; cursor: pointer; font-family: inherit; }
+  .toolbar button:hover { background: #ccc; }
+  .toolbar .sep { width: 1px; height: 18px; background: #bbb; margin: 0 4px; }
+
+  /* ── Page title row ── */
+  .page-title-row { background: #fff; border-bottom: 1px solid #ccc; padding: 10px 16px; }
+  .page-title-row h1 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #1A237E; margin: 0; }
+
+  /* ── Dashboard grid ── */
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
+
+  /* ── Panel (legacy card) ── */
+  .panel-legacy { background: #fff; border: 1px solid #ccc; }
+  .panel-legacy .panel-heading { background: #1A237E; color: #fff; padding: 6px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; justify-content: space-between; }
+  .panel-legacy .panel-heading .tools { display: flex; gap: 6px; }
+  .panel-legacy .panel-heading .tools span { cursor: pointer; opacity: .7; font-size: 11px; }
+  .panel-legacy .panel-heading .tools span:hover { opacity: 1; }
+  .panel-legacy .panel-body { padding: 12px; }
+
+  /* ── Tables ── */
+  table.legacy { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.legacy thead th { background: #f5f5f5; border: 1px solid #ddd; padding: 5px 8px; text-transform: uppercase; font-size: 11px; font-weight: 700; color: #555; text-align: left; }
+  table.legacy tbody td { border: 1px solid #eee; padding: 5px 8px; }
+  table.legacy tbody tr:nth-child(even) { background: #fafafa; }
+  table.legacy tbody tr:hover { background: #e8eaf6; }
+  table.legacy a { color: #1565C0; text-decoration: none; }
+  table.legacy a:hover { text-decoration: underline; }
+
+  /* ── Status badges ── */
+  .badge-hold { background: #c62828; color: #fff; padding: 1px 7px; border-radius: 2px; font-size: 10px; font-weight: 700; }
+  .badge-warn { background: #ef6c00; color: #fff; padding: 1px 7px; border-radius: 2px; font-size: 10px; font-weight: 700; }
+  .badge-ok { background: #2e7d32; color: #fff; padding: 1px 7px; border-radius: 2px; font-size: 10px; font-weight: 700; }
+
+  /* ── Chart placeholders ── */
+  .chart-placeholder { display: flex; align-items: center; justify-content: center; height: 200px; background: #fafafa; border: 1px dashed #ccc; color: #999; font-size: 12px; font-style: italic; }
+
+  /* ── Pie chart (pure CSS) ── */
+  .pie-container { display: flex; align-items: center; gap: 24px; }
+  .pie { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(
+    #1A237E 0% 28%,
+    #7C4DFF 28% 48%,
+    #00BCD4 48% 66%,
+    #FF7043 66% 82%,
+    #AED581 82% 93%,
+    #FFD54F 93% 100%
+  ); }
+  .pie-legend { font-size: 12px; line-height: 2; }
+  .pie-legend .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+  /* ── Bar chart (pure CSS) ── */
+  .bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 180px; padding-top: 10px; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .bar { width: 36px; background: #1A237E; border-radius: 2px 2px 0 0; transition: height .3s; }
+  .bar-label { font-size: 10px; margin-top: 4px; text-align: center; color: #555; }
+  .bar-value { font-size: 10px; font-weight: 700; color: #1A237E; margin-bottom: 2px; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; font-size: 10px; color: #999; padding: 12px; border-top: 1px solid #ddd; background: #f5f5f5; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ── TOP BANNER ── -->
+<div class="top-banner">
+  <div class="brand">
+    <span class="icon">🌀</span>
+    ASTRATERRA — INTERPLANETARY STUDY ABROAD
+  </div>
+  <div class="user-info">Welcome, dhollow &nbsp;|&nbsp; TerraFirma Polytechnic &nbsp;|&nbsp; Cycle 2026-Ψ</div>
+</div>
+
+<!-- ── TOOLBAR ── -->
+<div class="toolbar">
+  <button>🏠 Home</button>
+  <button>📋 Applications</button>
+  <button>🚀 Launch Schedule</button>
+  <button>🪐 Planet Registry</button>
+  <button>📊 Reports</button>
+  <span class="sep"></span>
+  <button>⚙ Admin</button>
+  <button>❓ Help</button>
+</div>
+
+<!-- ── PAGE TITLE ── -->
+<div class="page-title-row">
+  <h1>PORTAL OPERATIONS DASHBOARD</h1>
+</div>
+
+<!-- ── DASHBOARD GRID ── -->
+<div class="dash-grid">
+
+  <!-- Q1: Travelers by Destination Dimension (Pie) -->
+  <div class="panel-legacy">
+    <div class="panel-heading">
+      TRAVELERS BY DESTINATION PLANET
+      <div class="tools"><span>⟳</span> <span>▢</span> <span>✕</span></div>
+    </div>
+    <div class="panel-body">
+      <div class="pie-container">
+        <div class="pie"></div>
+        <div class="pie-legend">
+          <div><span class="swatch" style="background:#1A237E"></span>Velathos — 28% (434)</div>
+          <div><span class="swatch" style="background:#7C4DFF"></span>Dranthar — 20% (310)</div>
+          <div><span class="swatch" style="background:#00BCD4"></span>Nyssara — 18% (279)</div>
+          <div><span class="swatch" style="background:#FF7043"></span>Korynthis — 16% (248)</div>
+          <div><span class="swatch" style="background:#AED581"></span>Telmunox — 11% (171)</div>
+          <div><span class="swatch" style="background:#FFD54F"></span>Pyralith — 7% (109)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2: Applications by Program Track (Bar) -->
+  <div class="panel-legacy">
+    <div class="panel-heading">
+      APPLICATIONS BY PROGRAM TRACK
+      <div class="tools"><span>⟳</span> <span>▢</span> <span>✕</span></div>
+    </div>
+    <div class="panel-body">
+      <div class="bar-chart">
+        <div class="bar-col"><span class="bar-value">482</span><div class="bar" style="height:160px"></div><div class="bar-label">Astro-Biology</div></div>
+        <div class="bar-col"><span class="bar-value">310</span><div class="bar" style="height:103px"></div><div class="bar-label">Gravity Engineering</div></div>
+        <div class="bar-col"><span class="bar-value">274</span><div class="bar" style="height:91px"></div><div class="bar-label">Xeno-Linguistics</div></div>
+        <div class="bar-col"><span class="bar-value">218</span><div class="bar" style="height:72px"></div><div class="bar-label">Orbital Ethics</div></div>
+        <div class="bar-col"><span class="bar-value">148</span><div class="bar" style="height:49px"></div><div class="bar-label">Planetary Art</div></div>
+        <div class="bar-col"><span class="bar-value">119</span><div class="bar" style="height:40px"></div><div class="bar-label">Exo-Ecology</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3: Portal Alerts -->
+  <div class="panel-legacy">
+    <div class="panel-heading">
+      PORTAL ALERTS
+      <div class="tools"><span>⟳</span> <span>▢</span> <span>✕</span></div>
+    </div>
+    <div class="panel-body" style="padding:0">
+      <table class="legacy">
+        <thead>
+          <tr>
+            <th>ALERT TYPE</th>
+            <th>TRAVELER</th>
+            <th>TRAVELER ID</th>
+            <th>DETAILS</th>
+            <th>DATE</th>
+            <th>PRIORITY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge-hold">BREACH</span></td>
+            <td><a href="#">Orlanthe, Kassim</a></td>
+            <td>TRV-20264417</td>
+            <td>Atmospheric tolerance index below threshold (0.31/0.70 req.)</td>
+            <td>04/11/2026</td>
+            <td style="color:#c62828;font-weight:700;">Critical</td>
+          </tr>
+          <tr>
+            <td><span class="badge-warn">VARIANCE</span></td>
+            <td><a href="#">Voss, Lirien</a></td>
+            <td>TRV-20253082</td>
+            <td>Temporal credit conversion disputed — 4.2 local ≠ 3 standard</td>
+            <td>04/10/2026</td>
+            <td style="color:#ef6c00;font-weight:700;">Medium</td>
+          </tr>
+          <tr>
+            <td><span class="badge-hold">BREACH</span></td>
+            <td><a href="#">Tanaka, Emi</a></td>
+            <td>TRV-20261190</td>
+            <td>Transit visa expired — Nyssara reentry denied</td>
+            <td>04/09/2026</td>
+            <td style="color:#c62828;font-weight:700;">Critical</td>
+          </tr>
+          <tr>
+            <td><span class="badge-warn">VARIANCE</span></td>
+            <td><a href="#">Mbeki, Dayo</a></td>
+            <td>TRV-20260784</td>
+            <td>Gravity sickness detected post-landing — recalibration required</td>
+            <td>04/09/2026</td>
+            <td style="color:#ef6c00;font-weight:700;">Medium</td>
+          </tr>
+          <tr>
+            <td><span class="badge-ok">INFO</span></td>
+            <td><a href="#">Calloway, Juno</a></td>
+            <td>TRV-20250339</td>
+            <td>Return transit scheduled — Velathos launch window 04/18</td>
+            <td>04/08/2026</td>
+            <td style="color:#555;">Low</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Q4: Active Travel Holds -->
+  <div class="panel-legacy">
+    <div class="panel-heading">
+      ACTIVE TRAVEL HOLDS
+      <div class="tools"><span>⟳</span> <span>▢</span> <span>✕</span></div>
+    </div>
+    <div class="panel-body" style="padding:0">
+      <table class="legacy">
+        <thead>
+          <tr>
+            <th>HOLD TYPE</th>
+            <th>COUNT</th>
+            <th>% OF TRAVELERS</th>
+            <th>ACTION REQUIRED</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge-hold">VISA LAPSED</span></td>
+            <td style="font-weight:700">47</td>
+            <td>3.0%</td>
+            <td>Planetary Consulate renewal</td>
+          </tr>
+          <tr>
+            <td><span class="badge-hold">ATMO. TOLERANCE</span></td>
+            <td style="font-weight:700">29</td>
+            <td>1.9%</td>
+            <td>Recalibration at Adaptation Lab</td>
+          </tr>
+          <tr>
+            <td><span class="badge-warn">CREDIT DISPUTE</span></td>
+            <td style="font-weight:700">64</td>
+            <td>4.1%</td>
+            <td>Registrar credit audit</td>
+          </tr>
+          <tr>
+            <td><span class="badge-warn">MEDICAL</span></td>
+            <td style="font-weight:700">18</td>
+            <td>1.2%</td>
+            <td>Xeno-health clearance</td>
+          </tr>
+          <tr>
+            <td><span class="badge-ok">ORIENTATION</span></td>
+            <td style="font-weight:700">132</td>
+            <td>8.5%</td>
+            <td>Complete planetary acclimatization</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding:8px 12px;text-align:right;font-size:11px;color:#888;">
+        Total holds: 290 &nbsp;|&nbsp; Last refreshed: 04/13/2026 08:17 AM
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  ASTRATERRA Portal v5.9.1 &nbsp;|&nbsp; &copy; 2026 TerraFirma Polytechnic — Office of Interplanetary Affairs &nbsp;|&nbsp; All Rights Reserved &nbsp;|&nbsp; Build 5.9.1.0842
+</div>
+
+</body>
+</html>
